@@ -433,3 +433,19 @@ Mỗi weight có 2 subset: **Vietnamese** + **Latin**.
   `tests/font_latinext_audit.php` để biết ký tự nào đang thiếu.
 - Nếu cần đổi/bổ sung weight: file tĩnh lấy từ https://fonts.google.com hoặc
   `@fontsource/*`, đặt vào `public/assets/fonts/` và khai báo `@font-face` trong `fonts.css`.
+
+## 📤 11. Xuất trang tĩnh lên Netlify (repo `portfolio-cv`)
+
+Trang CV công khai cho nhà tuyển dụng chạy trên Netlify, lấy từ repo
+https://github.com/HienPhuong99/portfolio-cv (Netlify tự deploy khi có push). Netlify không chạy
+PHP/MySQL nên trang được **xuất tĩnh** từ dữ liệu hiện có trong Database:
+
+```bash
+php tools/export-static.php ../portfolio-cv
+```
+
+- Cần MySQL đang chạy. Script ghi `index.html`, `assets/` và `CV-Hien-Phuong.pdf` vào thư mục đích,
+  không động tới các file khác (`chon-mau.html`, `templates/`, `netlify.toml`).
+- Bản tĩnh không có form liên hệ; nút "Tải CV" tải thẳng file PDF.
+- CV PDF dựng từ `tools/cv/cv.html`. Sửa nội dung ở đó rồi in lại (Edge/Chrome headless):
+  `msedge --headless=new --no-pdf-header-footer --print-to-pdf=tools/cv/CV-Hien-Phuong.pdf tools/cv/cv.html`

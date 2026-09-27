@@ -39,7 +39,7 @@ try {
 }
 
 // Dọn dẹp bản ghi throttle cũ ngẫu nhiên (1/100 request)
-if (mt_rand(1, 100) === 1) {
+if (!defined('STATIC_EXPORT') && mt_rand(1, 100) === 1) {
     Repository::cleanupContactThrottle();
 }
 
@@ -215,6 +215,14 @@ $phoneDisplay = $profile['phone_display'] ?: ($profile['phone'] ?? '');
 $statusText   = trim((string)($profile['status_text'] ?? ''));
 $hasCvFile    = !empty($profile['cv_pdf_file']);
 
+// Bản xuất tĩnh (tools/export-static.php → Netlify): nút Tải CV trỏ thẳng file PDF, bỏ form liên hệ
+$isStatic   = defined('STATIC_EXPORT');
+$cvHref     = $isStatic ? STATIC_CV_FILE : url('cv-download.php');
+$cvDownload = $isStatic ? ' download' : '';
+if ($isStatic) {
+    $hasCvFile = true;
+}
+
 // Ảnh đại diện (ưu tiên bản .webp nếu tồn tại)
 $avatarImgUrl   = upload_url($profile['avatar']);
 $avatarWebpPath = preg_replace('/\.(png|jpe?g)$/i', '.webp', $profile['avatar'] ?? '');
@@ -296,7 +304,7 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
         <span class="status"><span class="status-dot"></span><?= e($statusText) ?></span>
       <?php endif; ?>
       <?php if ($hasCvFile): ?>
-        <a class="menu-btn" href="<?= url('cv-download.php') ?>" title="Tải CV dạng PDF">Tải CV</a>
+        <a class="menu-btn" href="<?= e($cvHref) ?>"<?= $cvDownload ?> title="Tải CV dạng PDF">Tải CV</a>
       <?php endif; ?>
       <button class="menu-btn" id="btnPrintCV" type="button" title="In hoặc lưu hồ sơ dạng PDF">In / PDF</button>
       <span class="clock" id="clock"></span>
@@ -579,10 +587,11 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
             <button class="btn btn-glass" type="button" data-copy="<?= e($profile['email']) ?>" data-copy-label="email">Sao chép email</button>
           <?php endif; ?>
           <?php if ($hasCvFile): ?>
-            <a class="btn btn-solid" href="<?= url('cv-download.php') ?>">Tải CV (PDF)</a>
+            <a class="btn btn-solid" href="<?= e($cvHref) ?>"<?= $cvDownload ?>>Tải CV (PDF)</a>
           <?php endif; ?>
         </div>
 
+        <?php if (!$isStatic): ?>
         <div class="contact-form-wrap">
           <h3 class="form-title">Gửi lời nhắn nhanh</h3>
           <p class="win-sub muted">Tôi sẽ phản hồi qua email hoặc số điện thoại trong vòng 24 giờ.</p>
@@ -614,6 +623,7 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
             <button type="submit" class="btn btn-solid btn-block">Gửi lời nhắn</button>
           </form>
         </div>
+        <?php endif; ?>
 
         <?php if (!empty($settings['footer_title']) || !empty($settings['footer_text'])): ?>
           <div class="win-foot">
@@ -642,7 +652,7 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
       <a class="btn btn-glass" href="<?= e($profile['zalo_url']) ?>" target="_blank" rel="noopener noreferrer">Zalo</a>
     <?php endif; ?>
     <?php if ($hasCvFile): ?>
-      <a class="btn btn-glass" href="<?= url('cv-download.php') ?>" title="Tải CV dạng PDF">Tải CV</a>
+      <a class="btn btn-glass" href="<?= e($cvHref) ?>"<?= $cvDownload ?> title="Tải CV dạng PDF">Tải CV</a>
     <?php else: ?>
       <button class="btn btn-glass" type="button" data-print title="In hoặc lưu hồ sơ dạng PDF">Lưu CV</button>
     <?php endif; ?>
