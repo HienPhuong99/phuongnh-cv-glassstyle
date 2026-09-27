@@ -449,3 +449,7 @@ php tools/export-static.php ../portfolio-cv
 - Bản tĩnh không có form liên hệ; nút "Tải CV" tải thẳng file PDF.
 - CV PDF dựng từ `tools/cv/cv.html`. Sửa nội dung ở đó rồi in lại (Edge/Chrome headless):
   `msedge --headless=new --no-pdf-header-footer --print-to-pdf=tools/cv/CV-Hien-Phuong.pdf tools/cv/cv.html`
+- Mỗi lần xuất, script cũng ghi **bản sao dữ liệu** `database/current.sql` (chỉ nội dung CV, không có
+  tài khoản Admin / tin nhắn). Máy mới hoặc phiên cloud dựng lại DB bằng:
+  `cp config/config.example.php config/config.php && php tools/data-snapshot.php restore`
+- Quy trình đầy đủ cho Claude Code: `CLAUDE.md` và skill `/cap-nhat-cv` (`.claude/skills/cap-nhat-cv/`).

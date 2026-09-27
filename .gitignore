@@ -28,3 +28,6 @@ tests/
 
 # Bản xuất tĩnh (tools/export-static.php)
 dist/
+
+# Cấu hình preview riêng từng máy (Claude Code)
+.claude/launch.json
