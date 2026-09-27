@@ -8,6 +8,7 @@
  * ở chế độ STATIC_EXPORT: bỏ form liên hệ, nút "Tải CV" tải thẳng file PDF.
  * Ghi ra: index.html, assets/ (CSS, JS, font, ảnh), file CV PDF và mọi file
  * uploads/ mà trang tham chiếu. Không động tới các file khác trong thư mục đích.
+ * Đồng thời cập nhật bản sao dữ liệu database/current.sql (xem tools/data-snapshot.php).
  */
 
 define('STATIC_EXPORT', true);
@@ -73,3 +74,7 @@ foreach (array_unique($m[1]) as $rel) {
 copy_file($cvPdf, $out . '/' . STATIC_CV_FILE);
 
 echo "Đã xuất trang tĩnh vào: $out\n";
+
+// Lưu kèm bản sao dữ liệu vào repo để lần sau (máy khác / cloud) xuất lại đúng nội dung này
+require_once __DIR__ . '/data-snapshot.php';
+snapshot_dump();
