@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>CV - Nguyễn Hiền Phương - Nhân viên kinh doanh</title>
+<meta name="author" content="Nguyễn Hiền Phương">
+<link rel="stylesheet" href="../../public/assets/fonts/fonts.css">
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --side: #33393d;
+    --side-ink: #eef0f1;
+    --side-mute: #c3c8cb;
+    --accent: #f29a1f;
+    --ink: #1f2326;
+    --ink-2: #4a5157;
+    --line: #e6e8ea;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 210mm; height: 297mm; }
+  body {
+    font-family: "Plus Jakarta Sans", sans-serif; font-size: 9.1pt; line-height: 1.42; color: var(--ink);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    display: grid; grid-template-columns: 70mm 1fr; overflow: hidden;
+  }
+
+  /* ---------- Cột trái ---------- */
+  aside { background: var(--side); color: var(--side-ink); padding: 12mm 7.5mm 10mm; }
+  .photo { display: block; width: 44mm; height: 44mm; margin: 0 auto 7mm; border-radius: 50%; object-fit: cover; border: 1.2mm solid rgba(255, 255, 255, .92); }
+  .name { font: 700 21pt/1.15 "Space Grotesk", sans-serif; color: var(--accent); letter-spacing: -.01em; }
+  .role { margin-top: 1.5mm; font-size: 9pt; font-weight: 700; letter-spacing: .06em; color: var(--accent); }
+
+  aside h2 { margin: 8mm 0 3mm; }
+  .contact { list-style: none; display: grid; gap: 2.4mm; font-size: 9pt; color: var(--side-ink); }
+  .contact li { display: grid; grid-template-columns: 4.5mm 1fr; gap: 2.5mm; align-items: center; }
+  .contact svg { width: 4mm; height: 4mm; fill: var(--accent); }
+  aside ul.dots { list-style: none; display: grid; gap: 1.6mm; font-size: 9.4pt; color: var(--side-ink); }
+  aside ul.dots li { position: relative; padding-left: 4mm; }
+  aside ul.dots li::before { content: ""; position: absolute; left: .5mm; top: .62em; width: 1.4mm; height: 1.4mm; border-radius: 50%; background: var(--accent); }
+
+  /* ---------- Tiêu đề mục (dùng chung 2 cột) ---------- */
+  h2 { display: flex; align-items: center; gap: 3mm; font-size: 9.6pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  h2::after { content: ""; flex: 1; height: .35mm; background: var(--accent); opacity: .9; }
+
+  /* ---------- Cột phải ---------- */
+  main { padding: 9.5mm 11mm 8mm 9mm; }
+  main section + section { margin-top: 4.6mm; }
+  main h2 { margin-bottom: 2.4mm; }
+  .objective { color: var(--ink-2); text-align: justify; }
+
+  .job + .job { margin-top: 2.8mm; padding-top: 2.8mm; border-top: .25mm solid var(--line); }
+  .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
+  .job-title { font-size: 9.6pt; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; }
+  .date { flex: none; font-size: 9pt; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .org { margin-top: .6mm; font-weight: 600; color: var(--ink); }
+  .org span { font-weight: 500; color: var(--ink-2); }
+  .job ul { list-style: none; margin-top: 1.1mm; display: grid; gap: .5mm; color: var(--ink-2); }
+  .job li { position: relative; padding-left: 4mm; }
+  .job li::before { content: ""; position: absolute; left: .6mm; top: .62em; width: 1.3mm; height: 1.3mm; border-radius: 50%; background: var(--accent); }
+  .muted { color: var(--ink-2); }
+
+  .skills { list-style: none; display: grid; gap: 1.8mm; counter-reset: sk; }
+  .skills li { counter-increment: sk; }
+  .skills b { display: block; font-weight: 700; }
+  .skills b::before { content: counter(sk) ". "; color: var(--accent); }
+  .skills span { color: var(--ink-2); }
+</style>
+</head>
+<body>
+  <aside>
+    <img class="photo" src="avatar.jpg" alt="Nguyễn Hiền Phương">
+    <p class="name">Hiền Phương</p>
+    <p class="role">NHÂN VIÊN KINH DOANH</p>
+
+    <h2>Thông tin cá nhân</h2>
+    <ul class="contact">
+      <li><svg viewBox="0 0 24 24"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.3.2 7.7 6.1 7.7-6.1H4.3Z"/></svg>hphuong123123@gmail.com</li>
+      <li><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1l-2.22 2.23Z"/></svg>087 6488 047</li>
+      <li><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>Trường Thọ, Thủ Đức, TP.HCM</li>
+    </ul>
+
+    <h2>Điểm mạnh</h2>
+    <ul class="dots">
+      <li>Chịu được áp lực cao trong công việc</li>
+      <li>Kiên nhẫn và bền bỉ</li>
+      <li>Có khả năng học hỏi và cập nhật kiến thức nâng cao trình độ chuyên môn</li>
+    </ul>
+
+    <h2>Điểm yếu</h2>
+    <ul class="dots">
+      <li>Dễ bị sao nhãng</li>
+      <li>Hay quên</li>
+    </ul>
+  </aside>
+
+  <main>
+    <section>
+      <h2>Mục tiêu nghề nghiệp</h2>
+      <p class="objective">Trong vòng 3 tháng đầu làm việc, tôi đặt mục tiêu trở thành nhân viên chính thức bằng cách đạt doanh số tối thiểu công ty đề ra. Đồng thời, tôi sẽ mở rộng mạng lưới khách hàng tiềm năng bằng cách tiếp cận và thiết lập mối quan hệ với ít nhất 10 khách hàng mới mỗi tháng. Tôi cũng sẽ chủ động tìm hiểu và áp dụng các kỹ năng bán hàng hiệu quả để nâng cao năng suất và đạt được kết quả tốt nhất trong công việc</p>
+    </section>
+
+    <section>
+      <h2>Kinh nghiệm làm việc</h2>
+
+      <div class="job">
+        <div class="job-head"><p class="job-title">Nhân viên kinh doanh</p><p class="date">04/2021 – 12/2024</p></div>
+        <p class="org">Công Ty TNHH Kinh Doanh Siêu Việt <span>– Cho thuê, mua bán máy và linh kiện máy photocopy</span></p>
+        <ul>
+          <li>Chủ động tìm kiếm, mở rộng tệp khách hàng qua các nền tảng mạng xã hội, <span style="white-space:nowrap">e-mail,…</span></li>
+          <li>Tư vấn bán hàng, giải đáp các thắc mắc và khiếu nại của khách hàng về sản phẩm/dịch vụ qua Zalo/Facebook/Hotline</li>
+          <li>Cập nhật thông tin sản phẩm và quản lý đơn hàng trên website và các sàn thương mại điện tử (Shopee, Lazada)</li>
+          <li>Làm báo cáo theo tháng về doanh số</li>
+          <li>Làm hợp đồng và báo giá cho thuê máy theo mẫu có sẵn</li>
+          <li>Làm hình ảnh, tem dán mừng các dịp lễ/tết theo mẫu trên Canva</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-head"><p class="job-title">Nhân viên bán hàng – Trực page</p><p class="date">03/2025 – 07/2025</p></div>
+        <p class="org">Hộ Kinh Doanh HỘ KINH DOANH 79 STORE <span>– Bán lẻ Điện thoại di động</span></p>
+        <ul>
+          <li>Tư vấn bán hàng, giải đáp thắc mắc và khiếu nại của khách hàng qua Facebook, Zalo</li>
+          <li>Thu hồi công nợ đối với khách hàng trả góp</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-head"><p class="job-title">Nhân viên kinh doanh (thử việc)</p><p class="date">08/2025 – 09/2025</p></div>
+        <p class="org">Công ty TNHH Mr.Rin Group</p>
+        <ul>
+          <li>Chăm sóc, chào hàng qua tin nhắn tệp khách hàng theo data công ty bàn giao</li>
+          <li>Học nhận biết sản phẩm, mã hàng</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-head"><p class="job-title">Nhân viên kinh doanh (thử việc)</p><p class="date">09/2025 – 11/2025</p></div>
+        <p class="org">Công ty TNHH TM Điện Thái Dương <span>– Thadeco</span></p>
+        <ul>
+          <li>Tìm kiếm khách hàng qua Trang Vàng, google map</li>
+          <li>Tư vấn bán hàng và báo giá qua Zalo</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Học vấn</h2>
+      <div class="job">
+        <div class="job-head"><p class="job-title">IT – Phần mềm</p><p class="date">07/2017 – 09/2020</p></div>
+        <p class="org">Cao Đẳng Thực Hành</p>
+        <p class="muted">Chuyên ngành Lập Trình Di Động</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Kỹ năng</h2>
+      <ol class="skills">
+        <li><b>Kỹ năng giao tiếp</b><span>Truyền đạt thông tin rõ ràng, mạch lạc; lắng nghe và hiểu rõ nhu cầu khách hàng</span></li>
+        <li><b>Kỹ năng tư vấn và thuyết phục</b><span>Nắm vững kiến thức sản phẩm/dịch vụ, đưa ra giải pháp phù hợp với nhu cầu mỗi khách hàng</span></li>
+        <li><b>Kỹ năng tìm kiếm khách hàng</b><span>Hiểu rõ ngành nghề kinh doanh, xác định đối tượng khách hàng tiềm năng tập trung nguồn lực tiếp cận</span></li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>

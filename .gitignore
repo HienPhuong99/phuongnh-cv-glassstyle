@@ -25,3 +25,6 @@ Thumbs.db
 
 # Script kiểm thử thủ công (kết nối DB, không thuộc bản triển khai)
 tests/
+
+# Bản xuất tĩnh (tools/export-static.php)
+dist/

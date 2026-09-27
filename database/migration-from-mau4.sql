@@ -41,7 +41,7 @@ UPDATE `sections` SET `dock_label` = CASE `key`
     WHEN 'strengths'  THEN 'Điểm mạnh'
     WHEN 'weaknesses' THEN 'Cải thiện'
     WHEN 'experience' THEN 'Kinh nghiệm'
-    WHEN 'education'  THEN 'Học vấn & Công cụ'
+    WHEN 'education'  THEN 'Học vấn'
     WHEN 'contact'    THEN 'Liên hệ'
     ELSE LEFT(`title`, 30)
   END;

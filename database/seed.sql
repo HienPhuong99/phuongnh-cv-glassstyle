@@ -52,7 +52,7 @@ INSERT INTO `sections` (`id`, `key`, `dock_label`, `badge_code`, `title`, `subti
 (3, 'experience', 'Kinh nghiệm',       '03 // HÀNH TRÌNH THỰC CHIẾN', 'Kinh nghiệm làm việc',  '', 1, 1, 30),
 (4, 'strengths',  'Điểm mạnh',         '04 // PHẨM CHẤT NỔI BẬT',     'Điểm mạnh & Kỷ luật',   '', 1, 0, 40),
 (5, 'weaknesses', 'Cải thiện',         '',                            'Điểm cần cải thiện',    '', 0, 0, 50),
-(6, 'education',  'Học vấn & Công cụ', '05 // NỀN TẢNG & CÔNG CỤ',    'Học vấn & Công cụ',     '', 1, 0, 60),
+(6, 'education',  'Học vấn',           '05 // NỀN TẢNG & CÔNG CỤ',    'Học vấn & Công cụ',     '', 1, 0, 60),
 (7, 'contact',    'Liên hệ',           '',                            'Liên hệ',               '', 1, 0, 70)
 ON DUPLICATE KEY UPDATE `title` = VALUES(`title`);
 

@@ -39,7 +39,7 @@ try {
 }
 
 // Dọn dẹp bản ghi throttle cũ ngẫu nhiên (1/100 request)
-if (mt_rand(1, 100) === 1) {
+if (!defined('STATIC_EXPORT') && mt_rand(1, 100) === 1) {
     Repository::cleanupContactThrottle();
 }
 
@@ -168,7 +168,7 @@ $winDefs = [
     'strengths'  => ['win' => 'strengths', 'icon' => 'shield',    'ic' => 'ic4', 'label' => 'Điểm mạnh',         'title' => 'Điểm mạnh & Kỷ luật'],
     'weaknesses' => ['win' => 'weak',      'icon' => 'trending',  'ic' => 'ic7', 'label' => 'Cải thiện',         'title' => 'Điểm cần cải thiện'],
     'experience' => ['win' => 'exp',       'icon' => 'briefcase', 'ic' => 'ic2', 'label' => 'Kinh nghiệm',       'title' => 'Kinh nghiệm làm việc'],
-    'education'  => ['win' => 'edu',       'icon' => 'book',      'ic' => 'ic5', 'label' => 'Học vấn & Công cụ', 'title' => 'Học vấn & Công cụ'],
+    'education'  => ['win' => 'edu',       'icon' => 'book',      'ic' => 'ic5', 'label' => 'Học vấn', 'title' => 'Học vấn & Công cụ'],
     'contact'    => ['win' => 'contact',   'icon' => 'phone',     'ic' => 'ic6', 'label' => 'Liên hệ',           'title' => 'Liên hệ'],
 ];
 
@@ -198,6 +198,14 @@ foreach ($winDefs as $secKey => $def) {
 }
 uasort($windows, fn($a, $b) => $a['order'] <=> $b['order']);
 
+// Số dạng `3+`, `100%` → thuộc tính cho hiệu ứng đếm; chữ thường → rỗng
+function stat_count_attr(string $value): string {
+    if (!preg_match('/^(\d{1,6})(\D{0,3})$/u', trim($value), $m)) {
+        return '';
+    }
+    return ' data-count="' . (int)$m[1] . '" data-suffix="' . e($m[2]) . '"';
+}
+
 // Thuộc tính cho <article>: đánh dấu cửa sổ tự mở sẵn trên máy tính
 function win_attrs(array $w): string {
     return $w['open'] ? ' data-open-on-load="1"' : '';
@@ -206,6 +214,14 @@ function win_attrs(array $w): string {
 $phoneDisplay = $profile['phone_display'] ?: ($profile['phone'] ?? '');
 $statusText   = trim((string)($profile['status_text'] ?? ''));
 $hasCvFile    = !empty($profile['cv_pdf_file']);
+
+// Bản xuất tĩnh (tools/export-static.php → Netlify): nút Tải CV trỏ thẳng file PDF, bỏ form liên hệ
+$isStatic   = defined('STATIC_EXPORT');
+$cvHref     = $isStatic ? STATIC_CV_FILE : url('cv-download.php');
+$cvDownload = $isStatic ? ' download' : '';
+if ($isStatic) {
+    $hasCvFile = true;
+}
 
 // Ảnh đại diện (ưu tiên bản .webp nếu tồn tại)
 $avatarImgUrl   = upload_url($profile['avatar']);
@@ -278,7 +294,7 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
   <!-- Menu bar -->
   <header class="menubar">
     <div class="menubar-left">
-      <a class="brand" href="#" data-open="about" aria-label="Mở hồ sơ"><span class="brand-mark"><?= e($settings['monogram'] ?? 'HP') ?></span><?= e($profile['full_name']) ?></a>
+      <a class="brand" href="#" data-open="about" aria-label="Mở hồ sơ"><span class="brand-mark"><?= e($settings['monogram'] ?? 'HP') ?></span><span class="brand-name"><?= e($profile['full_name']) ?></span></a>
       <?php foreach ($windows as $winKey => $w): ?>
         <a class="menu-link" href="#" data-open="<?= $winKey ?>"><?= e($w['label']) ?></a>
       <?php endforeach; ?>
@@ -288,7 +304,7 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
         <span class="status"><span class="status-dot"></span><?= e($statusText) ?></span>
       <?php endif; ?>
       <?php if ($hasCvFile): ?>
-        <a class="menu-btn" href="<?= url('cv-download.php') ?>" title="Tải CV dạng PDF">Tải CV</a>
+        <a class="menu-btn" href="<?= e($cvHref) ?>"<?= $cvDownload ?> title="Tải CV dạng PDF">Tải CV</a>
       <?php endif; ?>
       <button class="menu-btn" id="btnPrintCV" type="button" title="In hoặc lưu hồ sơ dạng PDF">In / PDF</button>
       <span class="clock" id="clock"></span>
@@ -313,20 +329,50 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
     <!-- Mobile home screen -->
     <section class="home" aria-label="Màn hình chính">
       <div class="home-card glass">
-        <?= avatar_picture('home-avatar', $hasWebp, $avatarWebpUrl, $avatarImgUrl, $avatarAlt) ?>
+        <span class="home-ava">
+          <?= avatar_picture('home-avatar', $hasWebp, $avatarWebpUrl, $avatarImgUrl, $avatarAlt) ?>
+          <?php if ($statusText !== ''): ?><span class="status-dot" aria-hidden="true"></span><?php endif; ?>
+        </span>
         <div>
           <p class="name"><?= e($profile['full_name']) ?></p>
           <p class="role"><?= e($profile['job_title']) ?></p>
           <?php if (!empty($profile['short_meta'])): ?>
             <p class="mono muted home-meta"><?= e($profile['short_meta']) ?></p>
           <?php endif; ?>
+          <?php if ($statusText !== ''): ?>
+            <p class="home-status"><?= e($statusText) ?></p>
+          <?php endif; ?>
         </div>
+        <?php if (!empty($profile['tagline'])): ?>
+          <p class="home-tag"><?= e($profile['tagline']) ?></p>
+        <?php endif; ?>
       </div>
       <nav class="home-grid" aria-label="Mục hồ sơ">
         <?php foreach ($windows as $winKey => $w): ?>
           <button class="home-app" type="button" data-open="<?= $winKey ?>"><span class="app-icon <?= $w['ic'] ?>"><?= glass_icon($w['icon']) ?></span><?= e($w['label']) ?></button>
         <?php endforeach; ?>
       </nav>
+
+      <?php if (!empty($keyStats)): ?>
+      <!-- Widget chỉ số: chạm để mở "Về tôi" -->
+      <button class="widget widget-stats glass" type="button"<?= isset($windows['about']) ? ' data-open="about"' : '' ?> aria-label="Chỉ số nổi bật">
+        <?php foreach (array_slice($keyStats, 0, 4) as $stat): ?>
+          <span class="w-stat"><b<?= stat_count_attr($stat['value']) ?>><?= e($stat['value']) ?></b><small><?= e($stat['label']) ?></small></span>
+        <?php endforeach; ?>
+      </button>
+      <?php endif; ?>
+
+      <?php $latestJob = $experiences[0] ?? null; if ($latestJob && isset($windows['exp'])): ?>
+      <!-- Widget công việc gần nhất: chạm để mở "Kinh nghiệm" -->
+      <button class="widget widget-job glass" type="button" data-open="exp">
+        <span class="app-icon <?= $windows['exp']['ic'] ?>"><?= glass_icon('briefcase') ?></span>
+        <span class="w-job">
+          <small class="mono muted">Gần nhất · <?= e($latestJob['period_text']) ?></small>
+          <b><?= e($latestJob['position']) ?></b>
+          <span><?= e($latestJob['company']) ?></span>
+        </span>
+      </button>
+      <?php endif; ?>
     </section>
 
     <?php if (isset($windows['about'])): ?>
@@ -369,12 +415,7 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
 
           <?php if (!empty($keyStats)): ?>
           <div class="stats">
-            <?php foreach ($keyStats as $stat):
-              $countAttr = '';
-              if (preg_match('/^(\d{1,6})(\D{0,3})$/u', trim($stat['value']), $m)) {
-                  $countAttr = ' data-count="' . (int)$m[1] . '" data-suffix="' . e($m[2]) . '"';
-              }
-            ?>
+            <?php foreach ($keyStats as $stat): $countAttr = stat_count_attr($stat['value']); ?>
               <div class="stat<?= $countAttr === '' ? ' stat-text' : '' ?>"<?= !empty($stat['subtext']) ? ' title="' . e($stat['subtext']) . '"' : '' ?>><b<?= $countAttr ?>><?= e($stat['value']) ?></b><span><?= e($stat['label']) ?></span></div>
             <?php endforeach; ?>
           </div>
@@ -546,10 +587,11 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
             <button class="btn btn-glass" type="button" data-copy="<?= e($profile['email']) ?>" data-copy-label="email">Sao chép email</button>
           <?php endif; ?>
           <?php if ($hasCvFile): ?>
-            <a class="btn btn-solid" href="<?= url('cv-download.php') ?>">Tải CV (PDF)</a>
+            <a class="btn btn-solid" href="<?= e($cvHref) ?>"<?= $cvDownload ?>>Tải CV (PDF)</a>
           <?php endif; ?>
         </div>
 
+        <?php if (!$isStatic): ?>
         <div class="contact-form-wrap">
           <h3 class="form-title">Gửi lời nhắn nhanh</h3>
           <p class="win-sub muted">Tôi sẽ phản hồi qua email hoặc số điện thoại trong vòng 24 giờ.</p>
@@ -581,6 +623,7 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
             <button type="submit" class="btn btn-solid btn-block">Gửi lời nhắn</button>
           </form>
         </div>
+        <?php endif; ?>
 
         <?php if (!empty($settings['footer_title']) || !empty($settings['footer_text'])): ?>
           <div class="win-foot">
@@ -601,7 +644,6 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
   </nav>
 
   <!-- Call bar (mobile) -->
-  <?php if (!empty($profile['phone']) || !empty($profile['zalo_url'])): ?>
   <div class="callbar glass">
     <?php if (!empty($profile['phone'])): ?>
       <a class="btn btn-solid" href="tel:<?= e($profile['phone']) ?>">Gọi ngay</a>
@@ -609,8 +651,12 @@ $initialWin = ($contactSuccess || !empty($contactError)) ? 'contact' : '';
     <?php if (!empty($profile['zalo_url'])): ?>
       <a class="btn btn-glass" href="<?= e($profile['zalo_url']) ?>" target="_blank" rel="noopener noreferrer">Zalo</a>
     <?php endif; ?>
+    <?php if ($hasCvFile): ?>
+      <a class="btn btn-glass" href="<?= e($cvHref) ?>"<?= $cvDownload ?> title="Tải CV dạng PDF">Tải CV</a>
+    <?php else: ?>
+      <button class="btn btn-glass" type="button" data-print title="In hoặc lưu hồ sơ dạng PDF">Lưu CV</button>
+    <?php endif; ?>
   </div>
-  <?php endif; ?>
 
   <div class="scrim"></div>
   <div class="toast glass" id="toast" role="status" aria-live="polite"></div>
