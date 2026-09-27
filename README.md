@@ -31,7 +31,7 @@ Kèm **trang quản trị CMS** được thiết kế riêng cho giao diện nà
 
 ## 🔐 2. Tài khoản quản trị Admin mặc định
 
-- **Đường dẫn Admin**: `http://your-domain.com/admin/login.php` (hoặc `http://localhost/cv-liquid-glass-cms/admin/login.php`)
+- **Đường dẫn Admin**: `http://your-domain.com/admin/login.php` (hoặc `http://localhost/phuongnh-cv-glassstyle/admin/login.php`)
 - **Tên đăng nhập**: `admin`
 - **Mật khẩu mặc định**: `Admin@123`
 
@@ -190,7 +190,7 @@ php -S localhost:8081 -t public
   php -S localhost:8081 -t public
   ```
 - Hoặc nếu cấu hình VirtualHost Apache / Nginx, hãy trỏ DocumentRoot vào thư mục `public/`:
-  - Truy cập trang CV Public: `http://localhost:8081/` (hoặc `http://localhost/cv-liquid-glass-cms/public/`)
+  - Truy cập trang CV Public: `http://localhost:8081/` (hoặc `http://localhost/phuongnh-cv-glassstyle/public/`)
   - Truy cập trang Quản trị: `http://localhost:8081/admin/login.php`
 
 ---
@@ -200,7 +200,7 @@ php -S localhost:8081 -t public
 ### 4.1. Triển khai trên Shared Hosting cPanel
 
 1. **Upload mã nguồn**:
-   - Nén toàn bộ thư mục `cv-liquid-glass-cms` thành file `.zip`.
+   - Nén toàn bộ thư mục `phuongnh-cv-glassstyle` thành file `.zip`.
    - Đăng nhập cPanel -> Mở **File Manager** -> Upload lên thư mục gốc hosting.
    - Cấu hình DocumentRoot của domain/subdomain trỏ vào thư mục `public` (hoặc chuyển nội dung `public/` ra `public_html/` và đưa các thư mục `app/`, `config/`, `database/` ra ngoài thư mục webroot để bảo mật tối đa).
 2. **Tạo Database MySQL**:
@@ -221,13 +221,13 @@ php -S localhost:8081 -t public
 
 #### 1. Phân quyền thư mục
 ```bash
-sudo chown -R www-data:www-data /var/www/cv-liquid-glass-cms
-sudo chmod -R 755 /var/www/cv-liquid-glass-cms
-sudo chmod -R 775 /var/www/cv-liquid-glass-cms/public/uploads
+sudo chown -R www-data:www-data /var/www/phuongnh-cv-glassstyle
+sudo chmod -R 755 /var/www/phuongnh-cv-glassstyle
+sudo chmod -R 775 /var/www/phuongnh-cv-glassstyle/public/uploads
 ```
 
 #### 2. Cấu hình Nginx Vhost Mẫu
-> ⚠️ **LƯU Ý QUAN TRỌNG:** Webroot phải trỏ vào `/var/www/cv-liquid-glass-cms/public`. File `.htaccess` **KHÔNG CÓ TÁC DỤNG** trên Nginx. Do đó bạn bắt buộc phải cấu hình block `location ^~ /uploads/` trực tiếp trong file cấu hình Nginx bên dưới.
+> ⚠️ **LƯU Ý QUAN TRỌNG:** Webroot phải trỏ vào `/var/www/phuongnh-cv-glassstyle/public`. File `.htaccess` **KHÔNG CÓ TÁC DỤNG** trên Nginx. Do đó bạn bắt buộc phải cấu hình block `location ^~ /uploads/` trực tiếp trong file cấu hình Nginx bên dưới.
 > Đồng thời, trong Apache/LiteSpeed, `php_flag engine off` chỉ hiệu lực với `mod_php` cũ và không có tác dụng trên PHP-FPM/LiteSpeed. Lớp chặn chính xác và an toàn nhất là `<FilesMatch>` chặn toàn bộ extension thực thi.
 
 Tạo file `/etc/nginx/sites-available/cv-developer.conf`:
@@ -235,7 +235,7 @@ Tạo file `/etc/nginx/sites-available/cv-developer.conf`:
 server {
     listen 80;
     server_name your-domain.com;
-    root /var/www/cv-liquid-glass-cms/public;
+    root /var/www/phuongnh-cv-glassstyle/public;
     index index.php index.html;
 
     charset utf-8;
@@ -291,7 +291,7 @@ https://your-domain.com/tests/
 
 - Nếu `/database/schema.sql` **tải xuống được file `.sql`** → document root đang trỏ SAI
   (trỏ vào thư mục gốc dự án thay vì `public/`). **Phải sửa ngay trước khi công khai website.**
-- Cách đúng: DocumentRoot / Nginx `root` phải trỏ vào `.../cv-liquid-glass-cms/public`,
+- Cách đúng: DocumentRoot / Nginx `root` phải trỏ vào `.../phuongnh-cv-glassstyle/public`,
   còn `app/`, `config/`, `database/`, `tests/` nằm NGOÀI webroot.
 
 **2. Kiểm tra thư mục `uploads/` không thực thi được PHP:**
@@ -326,7 +326,7 @@ Tương tự, `php_flag engine off` chỉ chạy với `mod_php` cũ — lớp c
 ## 📁 7. Cấu trúc thư mục dự án
 
 ```
-cv-liquid-glass-cms/
+phuongnh-cv-glassstyle/
 ├── config/
 │   ├── config.example.php     # File cấu hình mẫu
 │   └── config.php             # Cấu hình DB, BASE_URL, APP_KEY, PUBLIC_PATH, Session

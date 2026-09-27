@@ -33,7 +33,7 @@ if (empty(APP_KEY) || APP_KEY === 'CHANGE_ME_SECRET_APP_KEY_AT_LEAST_32_CHARS_LO
 }
 
 
-// Đường dẫn gốc BASE_URL (Ví dụ: http://localhost/cv-liquid-glass-cms hoặc http://yourdomain.com)
+// Đường dẫn gốc BASE_URL (Ví dụ: http://localhost/phuongnh-cv-glassstyle hoặc http://yourdomain.com)
 // Để trống '' để hệ thống tự động nhận diện theo request
 define('BASE_URL', getenv('BASE_URL') ?: '');
 
