@@ -429,11 +429,11 @@
     let dockX = null, dockRaf = 0;
     const paintDock = () => {
       dockRaf = 0;
-      dockItems.forEach(it => {
-        if (dockX === null) { it.style.setProperty('--s', 1); return; }
-        const r = it.getBoundingClientRect();
-        const d = Math.abs(dockX - (r.left + r.width / 2));
-        const t = Math.max(0, 1 - d / 150);
+      if (dockX === null) { dockItems.forEach(it => it.style.setProperty('--s', 1)); return; }
+      // Đọc hết vị trí trước rồi mới ghi --s: tránh ép layout lại sau mỗi icon
+      const cx = dockItems.map(it => { const r = it.getBoundingClientRect(); return r.left + r.width / 2; });
+      dockItems.forEach((it, i) => {
+        const t = Math.max(0, 1 - Math.abs(dockX - cx[i]) / 150);
         it.style.setProperty('--s', (1 + .55 * t * t * (3 - 2 * t)).toFixed(3));
       });
     };
@@ -492,8 +492,10 @@
   tick(); setInterval(tick, 20000);
 
   /* ---------- Print & copy ---------- */
-  const printBtn = $('#btnPrintCV');
-  if (printBtn) printBtn.addEventListener('click', () => window.print());
+  $$('#btnPrintCV, [data-print]').forEach(b => b.addEventListener('click', () => window.print()));
+
+  // Widget chỉ số trên màn hình chính (mobile) đếm lên khi vừa vào trang
+  if (matchMedia('(max-width: 860px)').matches) countUp($('.home'), 300);
   $$('[data-copy]').forEach(b => b.addEventListener('click', async () => {
     try { await navigator.clipboard.writeText(b.dataset.copy); showToast('Đã sao chép ' + (b.dataset.copyLabel || '')); }
     catch (e) { showToast(b.dataset.copy); }
