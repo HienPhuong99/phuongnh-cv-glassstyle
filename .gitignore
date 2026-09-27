@@ -1,0 +1,27 @@
+# File cấu hình nhạy cảm chứa mật khẩu DB & Secret Key
+config/config.php
+
+# File nén đóng gói
+*.zip
+*.tar.gz
+*.rar
+
+# Thư mục uploads (bỏ qua file tải lên thực tế, giữ file bảo vệ & cấu trúc thư mục)
+public/uploads/*
+!public/uploads/.htaccess
+!public/uploads/index.html
+!public/uploads/cv/
+!public/uploads/cv/.gitkeep
+
+# Môi trường và dependencies
+node_modules/
+.env
+.env.*
+
+# File hệ thống OS & Logs
+.DS_Store
+Thumbs.db
+*.log
+
+# Script kiểm thử thủ công (kết nối DB, không thuộc bản triển khai)
+tests/
